@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Body, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common';
+import { Request, response, Response } from 'express';
+import { CreateUserDto } from 'src/users/dtos/createUser.dto';
 
 @Controller('users')
 export class UsersController {
@@ -18,7 +19,9 @@ export class UsersController {
     }
 
     @Get('posts')
-    getUserPosts() {
+    getUserPosts(@Query('sortBy') sortBy: string) {
+        console.log(sortBy);
+        
         return [
             {
                 post: 'hemangsinha',
@@ -31,9 +34,27 @@ export class UsersController {
         ];
     }
 
-    @Post()
-    createUser(@Req() request: Request, @Res() response: Response) {
-        console.log(request);
-        response.send('Created');
+    // @Post()
+    // createUser(@Req() request: Request, @Res() response: Response) {
+    //     console.log(request);
+    //     response.send('Created');
+    // }
+
+    @Post('create')
+    createUser(@Body() userData:CreateUserDto) {
+        console.log(userData);
+        return {};
+    }
+
+    // @Get(':id')
+    // getUserById(@Req() request: Request, @Res() response: Response) {
+    //     console.log(request.params);
+    //     response.send('');
+    // }
+
+    @Get(':id')
+    getUserById(@Param('id') id: string) {
+        console.log(id);
+        return {id};
     }
 }
