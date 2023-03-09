@@ -18,10 +18,11 @@ export class UsersController {
         ];
     }
 
+    // Query Parameters
     @Get('posts')
     getUserPosts(@Query('sortBy') sortBy: string) {
         console.log(sortBy);
-        
+
         return [
             {
                 post: 'hemangsinha',
@@ -34,24 +35,28 @@ export class UsersController {
         ];
     }
 
+    // Classic Express Way
     // @Post()
     // createUser(@Req() request: Request, @Res() response: Response) {
     //     console.log(request);
     //     response.send('Created');
     // }
 
+    // Request Body
     @Post('create')
     createUser(@Body() userData:CreateUserDto) {
         console.log(userData);
         return {};
     }
 
+    // Classic Express Way
     // @Get(':id')
     // getUserById(@Req() request: Request, @Res() response: Response) {
     //     console.log(request.params);
     //     response.send('');
     // }
 
+    // Route Parameters
     @Get(':id')
     getUserById(@Param('id') id: string) {
         console.log(id);
