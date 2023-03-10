@@ -1,21 +1,15 @@
-import { Body, Controller, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Query, Req, Res, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseBoolPipe, ParseIntPipe, Post, Query, Req, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Request, response, Response } from 'express';
 import { CreateUserDto } from 'src/users/dtos/createUser.dto';
+import { UsersService } from 'src/users/services/users/users.service';
 
 @Controller('users')
 export class UsersController {
+    constructor(private userService: UsersService) {}
+
     @Get()
     getUsers() {
-        return [
-            {
-                username: 'hemangsinha',
-                password: 'hemangsinhapassword'
-            },
-            {
-                username: 'hemangdtu',
-                password: 'hemangdtupassword'
-            }
-        ];
+        return this.userService.fetchUsers();
     }
 
     // Query Parameters
@@ -47,7 +41,7 @@ export class UsersController {
     @UsePipes(new ValidationPipe())
     createUser(@Body() userData:CreateUserDto) {
         console.log(userData);
-        return {};
+        return this.userService.createUser(userData);
     }
 
     // Classic Express Way
@@ -60,7 +54,8 @@ export class UsersController {
     // Route Parameters
     @Get(':id')
     getUserById(@Param('id', ParseIntPipe) id: number) {
-        console.log(id);
-        return {id};
+        let result = this.userService.fetchUserById(id);
+        if(!result) throw new HttpException("User not found!", HttpStatus.BAD_REQUEST);
+        return result;
     }
 }
