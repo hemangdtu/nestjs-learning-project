@@ -1,10 +1,12 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseBoolPipe, ParseIntPipe, Post, Query, Req, Res, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseBoolPipe, ParseIntPipe, Post, Query, Req, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Request, response, Response } from 'express';
 import { CreateUserDto } from 'src/users/dtos/createUser.dto';
+import { UserAuthGuard } from 'src/users/guards/user-auth/user-auth.guard';
 import { ValidateUserDataPipe } from 'src/users/pipes/validate-user-data/validate-user-data.pipe';
 import { UsersService } from 'src/users/services/users/users.service';
 
 @Controller('users')
+@UseGuards(UserAuthGuard)
 export class UsersController {
     constructor(private userService: UsersService) {}
 
